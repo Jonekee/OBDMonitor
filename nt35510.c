@@ -448,9 +448,9 @@ void nt35510_hw_init(void)
 	GPIOD->MODER |= 0xAAAA0A0A;
 	GPIOD->PUPDR |= 0x55550505;
 	GPIOD->OSPEEDR |= 0xFFFF0F0F; 
-	GPIOD->AFR[0] |= 0xCCCCCCCC;
-	GPIOD->AFR[1] |= 0x00CC00CC;
-
+	GPIOD->AFR[0] |= 0x00CC00CC;
+	GPIOD->AFR[1] |= 0xCCCCCCCC;
+	
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN;
 	GPIOE->MODER |= 0xAAAA8000;
 	GPIOE->PUPDR |= 0x55554000;
@@ -469,21 +469,45 @@ void nt35510_hw_init(void)
 	GPIOG->PUPDR |= 0x01000000;
 	GPIOG->OSPEEDR |= 0x03000000;
 	GPIOG->AFR[1] |= 0x000C0000;
-
+	
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
 	GPIOB->MODER |= GPIO_MODER_MODER15_0;
 }
 
 void nt35510_open(struct lcd_device *dev)
 {
-	uint16_t i;
+	uint32_t i;
 	for (i = 0; i < sizeof(nt35510_setup_cmdmap); i++) {
 		dev->cmd_reg = nt35510_setup_cmdmap[i].reg_addr;
 		if (0xFF != nt35510_setup_cmdmap[i].data) {
 			dev->dat_reg = nt35510_setup_cmdmap[i].data;
 		}
 	}
+	
+	dev->cmd_reg = 0x2C00;
+	dev->dat_reg = 0;
+	dev->cmd_reg = 0x2C00+1;
+	dev->dat_reg = 0;
+	dev->cmd_reg = 0x2C00+2;
+	dev->dat_reg = (480-1)>>8;
+	dev->cmd_reg = 0x2C00+3;
+	dev->dat_reg = (480-1)&0XFF;
+	dev->cmd_reg = 0x2B00;
+	dev->dat_reg = 0;
+	dev->cmd_reg = 0x2B00+1;
+	dev->dat_reg = 0;
+	dev->cmd_reg = 0x2B00+2;
+	dev->dat_reg = (800-1)>>8;
+	dev->cmd_reg = 0x2B00+3;
+	dev->dat_reg = (800-1)&0XFF;
+	
 	GPIOB->ODR |= GPIO_ODR_ODR_15;
+	
+	dev->cmd_reg = 0X2C00;
+	
+	for (i = 0; i < 480 * 800; i++) {
+		dev->dat_reg = 0x0000;
+	}
 }
 
 void nt35510_close(struct lcd_device *dev)

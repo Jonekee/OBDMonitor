@@ -28,4 +28,5 @@ void system_boot(void)
 {
 	system_set_clock();
 	lcd_driver_hw_init();
+	lcd_driver_open();
 }
