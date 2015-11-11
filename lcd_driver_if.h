@@ -3,13 +3,18 @@
 
 #include <stdint.h>
 
-struct lcd_device {
+struct lcd_dev {
 	uint16_t cmd_reg;
 	uint16_t dat_reg;
 };
 
+struct lcd_device {
+	struct lcd_dev *dev;
+	uint16_t width;
+	uint16_t height;
+};
+
 struct lcd_opt {
-	void (*hw_init)(void);
 	void (*open)(struct lcd_device *dev);
 	void (*close)(struct lcd_device *dev);
 };

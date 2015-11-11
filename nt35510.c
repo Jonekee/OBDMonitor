@@ -7,7 +7,6 @@ static void nt35510_open(struct lcd_device *dev);
 static void nt35510_close(struct lcd_device *dev);
 
 struct lcd_opt nt35510_opt = {
-	nt35510_hw_init,
 	nt35510_open,
 	nt35510_close
 };
@@ -429,84 +428,39 @@ static struct lcd_cmd nt35510_setup_cmdmap[] = {
 	{0x2900, 0xFF}
 };
 
-void nt35510_hw_init(void)
-{
-	RCC->AHB3ENR |= RCC_AHB3ENR_FSMCEN;
-
-	FSMC_Bank1->BTCR[7]|=0XF;
-	FSMC_Bank1->BTCR[7]|=60<<8;
-
-	FSMC_Bank1E->BWTR[6]&=~0XF;
-	FSMC_Bank1E->BWTR[6]&=~(0XF<<8);
-	FSMC_Bank1E->BWTR[6]|=3<<0;
-	FSMC_Bank1E->BWTR[6]|=2<<8;
-
-	FSMC_Bank1->BTCR[6] &= ~(FSMC_BCR4_WAITEN | FSMC_BCR4_MUXEN);
-	FSMC_Bank1->BTCR[6] |= (FSMC_BCR4_EXTMOD | FSMC_BCR4_WREN | FSMC_BCR4_MBKEN);
-
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
-	GPIOD->MODER |= 0xAAAA0A0A;
-	GPIOD->PUPDR |= 0x55550505;
-	GPIOD->OSPEEDR |= 0xFFFF0F0F; 
-	GPIOD->AFR[0] |= 0x00CC00CC;
-	GPIOD->AFR[1] |= 0xCCCCCCCC;
-	
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN;
-	GPIOE->MODER |= 0xAAAA8000;
-	GPIOE->PUPDR |= 0x55554000;
-	GPIOE->OSPEEDR |= 0xFFFFC000;
-	GPIOE->AFR[0] |= 0xC0000000;
-	GPIOE->AFR[1] |= 0xCCCCCCCC;
-
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOFEN;
-	GPIOF->MODER |= 0x02000000;
-	GPIOF->PUPDR |= 0x01000000;
-	GPIOF->OSPEEDR |= 0x03000000;
-	GPIOF->AFR[1] |= 0x000C0000;
-
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOGEN;
-	GPIOG->MODER |= 0x02000000;
-	GPIOG->PUPDR |= 0x01000000;
-	GPIOG->OSPEEDR |= 0x03000000;
-	GPIOG->AFR[1] |= 0x000C0000;
-	
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
-	GPIOB->MODER |= GPIO_MODER_MODER15_0;
-}
-
 void nt35510_open(struct lcd_device *dev)
 {
 	uint32_t i;
 	for (i = 0; i < sizeof(nt35510_setup_cmdmap); i++) {
-		dev->cmd_reg = nt35510_setup_cmdmap[i].reg_addr;
+		dev->dev->cmd_reg = nt35510_setup_cmdmap[i].reg_addr;
 		if (0xFF != nt35510_setup_cmdmap[i].data) {
-			dev->dat_reg = nt35510_setup_cmdmap[i].data;
+			dev->dev->dat_reg = nt35510_setup_cmdmap[i].data;
 		}
 	}
 	
-	dev->cmd_reg = 0x2C00;
-	dev->dat_reg = 0;
-	dev->cmd_reg = 0x2C00+1;
-	dev->dat_reg = 0;
-	dev->cmd_reg = 0x2C00+2;
-	dev->dat_reg = (480-1)>>8;
-	dev->cmd_reg = 0x2C00+3;
-	dev->dat_reg = (480-1)&0XFF;
-	dev->cmd_reg = 0x2B00;
-	dev->dat_reg = 0;
-	dev->cmd_reg = 0x2B00+1;
-	dev->dat_reg = 0;
-	dev->cmd_reg = 0x2B00+2;
-	dev->dat_reg = (800-1)>>8;
-	dev->cmd_reg = 0x2B00+3;
-	dev->dat_reg = (800-1)&0XFF;
+	dev->dev->cmd_reg = 0x2C00;
+	dev->dev->dat_reg = 0;
+	dev->dev->cmd_reg = 0x2C00+1;
+	dev->dev->dat_reg = 0;
+	dev->dev->cmd_reg = 0x2C00+2;
+	dev->dev->dat_reg = (dev->width - 1) >> 8;
+	dev->dev->cmd_reg = 0x2C00+3;
+	dev->dev->dat_reg = (dev->width - 1) & 0XFF;
+	dev->dev->cmd_reg = 0x2B00;
+	dev->dev->dat_reg = 0;
+	dev->dev->cmd_reg = 0x2B00+1;
+	dev->dev->dat_reg = 0;
+	dev->dev->cmd_reg = 0x2B00+2;
+	dev->dev->dat_reg = (dev->height - 1) >> 8;
+	dev->dev->cmd_reg = 0x2B00+3;
+	dev->dev->dat_reg = (dev->height - 1) & 0XFF;
 	
 	GPIOB->ODR |= GPIO_ODR_ODR_15;
 	
-	dev->cmd_reg = 0X2C00;
+	dev->dev->cmd_reg = 0X2C00;
 	
-	for (i = 0; i < 480 * 800; i++) {
-		dev->dat_reg = 0x0000;
+	for (i = 0; i < dev->width * dev->height; i++) {
+		dev->dev->->dat_reg = 0x0000;
 	}
 }
 
