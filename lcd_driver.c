@@ -1,4 +1,5 @@
 #include "lcd_driver_if.h"
+#include "lcd_driver.h"
 
 #define NT35510_BASE 0x6C00007E
 
@@ -21,6 +22,24 @@ extern struct lcd_opt nt35510_opt;
 void lcd_driver_open(void)
 {
 	driver->opt->open(&(driver->dev));
+}
+
+void lcd_driver_rectangle(struct rectangle *rect, uint16_t l, uint16_t c)
+{
+	uint16_t t;
+	uint16_t p;
+	for (t = rect->x; t < rect->w + rect->x; t++) {
+		for (p = rect->y; p < rect->y + l; p++) {
+			driver->opt->draw_point(&(driver->dev), t, p, c);
+			driver->opt->draw_point(&(driver->dev), t, p + rect->h, c);
+		}
+	}
+	for (t = rect->y; t < rect->h + rect->y + l; t++) {
+		for (p = rect->x; p < rect->x + l; p++) {
+			driver->opt->draw_point(&(driver->dev), p, t, c);
+			driver->opt->draw_point(&(driver->dev), p + rect->w, t, c);
+		}
+	}
 }
 
 void lcd_driver_close(void)

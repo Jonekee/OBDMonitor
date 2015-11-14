@@ -3,10 +3,12 @@
 #include <stm32f4xx.h>
 
 static void nt35510_open(struct lcd_device *dev);
+static void nt35510_draw_point(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t color);
 static void nt35510_close(struct lcd_device *dev);
 
 struct lcd_opt nt35510_opt = {
 	nt35510_open,
+	nt35510_draw_point,
 	nt35510_close
 };
 
@@ -461,6 +463,22 @@ void nt35510_open(struct lcd_device *dev)
 	for (i = 0; i < dev->width * dev->height; i++) {
 		dev->dev->dat_reg = 0x0000;
 	}
+}
+
+void nt35510_draw_point(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t color)
+{
+	dev->dev->cmd_reg = 0x2A00;
+	dev->dev->dat_reg = x >> 8;
+	dev->dev->cmd_reg = 0x2A01;
+	dev->dev->dat_reg = x & 0xFF;
+	
+	dev->dev->cmd_reg = 0x2B00;
+	dev->dev->dat_reg = y >> 8;
+	dev->dev->cmd_reg = 0x2B01;
+	dev->dev->dat_reg = y & 0xFF;
+	
+	dev->dev->cmd_reg = 0x2C00;
+	dev->dev->dat_reg = color;
 }
 
 void nt35510_close(struct lcd_device *dev)

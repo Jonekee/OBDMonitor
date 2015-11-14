@@ -27,5 +27,16 @@ void button_set_pressed(struct button *b, uint8_t p)
 void button_paint(struct widget *wid, uint16_t x, uint16_t y)
 {
 	struct button *btn = (struct button *)wid;
-	(void)btn;
+	if (btn->visible) {
+		struct rectangle rect;
+			rect.x = x;
+			rect.y = y;
+			rect.w = btn->w;
+			rect.h = btn->h;
+		if (btn->pressed) {
+			lcd_driver_rectangle(&rect, 5, 0xFFFF);
+		} else {
+			lcd_driver_rectangle(&rect, 5, 0xF800);
+		}
+	}
 }

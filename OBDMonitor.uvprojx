@@ -480,11 +480,6 @@
               <FilePath>.\common.c</FilePath>
             </File>
             <File>
-              <FileName>widget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\widget.c</FilePath>
-            </File>
-            <File>
               <FileName>surface.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\surface.c</FilePath>

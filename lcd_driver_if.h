@@ -16,6 +16,7 @@ struct lcd_device {
 
 struct lcd_opt {
 	void (*open)(struct lcd_device *dev);
+	void (*draw_point)(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t color);
 	void (*close)(struct lcd_device *dev);
 };
 
