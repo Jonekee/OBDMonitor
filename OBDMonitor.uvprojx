@@ -436,6 +436,16 @@
               <FileType>1</FileType>
               <FilePath>.\system.c</FilePath>
             </File>
+            <File>
+              <FileName>gt9147.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\gt9147.c</FilePath>
+            </File>
+            <File>
+              <FileName>tp_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\tp_driver.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -455,6 +465,36 @@
         </Group>
         <Group>
           <GroupName>APP</GroupName>
+        </Group>
+        <Group>
+          <GroupName>GUI</GroupName>
+          <Files>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\button.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\common.c</FilePath>
+            </File>
+            <File>
+              <FileName>widget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\widget.c</FilePath>
+            </File>
+            <File>
+              <FileName>surface.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\surface.c</FilePath>
+            </File>
+            <File>
+              <FileName>layout.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\layout.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "system.h"
-#include "sysevent_if.h"
+#include "event.h"
 
 int main(void)
 {
