@@ -9,11 +9,12 @@ struct lcd_driver {
 
 extern struct lcd_opt nt35510_opt;
 
-static struct lcd_driver lcd_drivers[] = {
-	{{(struct lcd_dev *)NT35510_BASE, 480, 800}, &nt35510_opt}
+static struct lcd_driver lcd_drv = {
+	{(struct lcd_dev *)NT35510_BASE, 480, 800},
+	&nt35510_opt
 };
 
-static struct lcd_driver *driver = &(lcd_drivers[0]);
+static struct lcd_driver *driver = &lcd_drv;
 
 extern struct lcd_opt nt35510_opt;
 

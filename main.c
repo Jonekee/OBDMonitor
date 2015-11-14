@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "system.h"
+#include "sysevent_if.h"
 
 int main(void)
 {

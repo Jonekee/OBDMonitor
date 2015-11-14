@@ -371,7 +371,7 @@
             <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32F407xx,DATA_IN_ExtSRAM</Define>
+              <Define>STM32F407xx</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>

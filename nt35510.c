@@ -2,7 +2,6 @@
 
 #include <stm32f4xx.h>
 
-static void nt35510_hw_init(void);
 static void nt35510_open(struct lcd_device *dev);
 static void nt35510_close(struct lcd_device *dev);
 
@@ -460,7 +459,7 @@ void nt35510_open(struct lcd_device *dev)
 	dev->dev->cmd_reg = 0X2C00;
 	
 	for (i = 0; i < dev->width * dev->height; i++) {
-		dev->dev->->dat_reg = 0x0000;
+		dev->dev->dat_reg = 0x0000;
 	}
 }
 

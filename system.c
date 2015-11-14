@@ -1,6 +1,7 @@
 #include <stm32f4xx.h>
 
 #include "lcd_driver.h"
+#include "tp_driver.h"
 
 static void system_set_clock(void);
 
@@ -71,4 +72,5 @@ void system_boot(void)
 	GPIOB->MODER |= GPIO_MODER_MODER15_0;
 
 	lcd_driver_open();
+	tp_driver_open();
 }
