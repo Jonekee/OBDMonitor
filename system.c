@@ -4,6 +4,7 @@
 #include "tp_driver.h"
 
 static void system_set_clock(void);
+static void system_hw_setup(void);
 
 void system_set_clock(void)
 {
@@ -25,10 +26,8 @@ void system_set_clock(void)
 	while((RCC->CFGR&(3<<2))!=(2<<2));
 }
 
-void system_boot(void)
+void system_hw_setup(void)
 {
-	system_set_clock();
-
 	RCC->AHB3ENR |= RCC_AHB3ENR_FSMCEN;
 
 	FSMC_Bank1->BTCR[7]|=0XF;
@@ -70,7 +69,12 @@ void system_boot(void)
 	
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
 	GPIOB->MODER |= GPIO_MODER_MODER15_0;
+}
 
+void system_boot(void)
+{
+	system_set_clock();
+	system_hw_setup();
 	lcd_driver_open();
 	tp_driver_open();
 }

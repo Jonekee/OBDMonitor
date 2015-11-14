@@ -2,8 +2,10 @@
 #define _BUTTON_H
 
 #include "common.h"
+#include "widget.h"
 
 struct button {
+	struct widget base;
 	uint8_t type;
 	uint8_t w;
 	uint8_t h;
