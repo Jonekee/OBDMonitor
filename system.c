@@ -14,7 +14,7 @@ void system_set_clock(void)
 	PWR->CR|=3<<14;
 	RCC->CFGR|=(0<<4)|(5<<10)|(4<<13);
 	RCC->CR&=~(1<<24);
-	RCC->PLLCFGR=8|(336<<6)|(((2>>1)-1)<<16)|(7<<24)|(1<<22);
+	RCC->PLLCFGR=25|(336<<6)|(((2>>1)-1)<<16)|(7<<24)|(1<<22);
 	RCC->CR|=1<<24;
 	while((RCC->CR&(1<<25))==0);
 	FLASH->ACR|=1<<8;
@@ -44,7 +44,7 @@ void system_hw_setup(void)
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
 	GPIOD->MODER |= 0xAAAA0A0A;
 	GPIOD->PUPDR |= 0x55550505;
-	GPIOD->OSPEEDR |= 0xFFFF0F0F; 
+	GPIOD->OSPEEDR |= 0xFFFF0F0F;
 	GPIOD->AFR[0] |= 0x00CC00CC;
 	GPIOD->AFR[1] |= 0xCCCCCCCC;
 	
