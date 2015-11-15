@@ -480,14 +480,14 @@
               <FilePath>.\common.c</FilePath>
             </File>
             <File>
-              <FileName>surface.c</FileName>
+              <FileName>widget.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\surface.c</FilePath>
+              <FilePath>.\widget.c</FilePath>
             </File>
             <File>
-              <FileName>layout.c</FileName>
+              <FileName>demo_widget.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\layout.c</FilePath>
+              <FilePath>.\demo_widget.c</FilePath>
             </File>
           </Files>
         </Group>
