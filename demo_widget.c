@@ -1,8 +1,6 @@
 #include <stdint.h>
 #include "button.h"
 
-#define DEMO_WIDGET_MAX_LAYER 5
-
 enum {
 	WIDGET_TYPE_BUTTON
 };
@@ -58,14 +56,16 @@ void demo_widget_paint(struct widget *wid, uint16_t x, uint16_t y)
 {
 	uint16_t i;
 	uint16_t j;
+	uint16_t k = 0;
 	struct demo_widget *dw = (struct demo_widget *)wid;
-	for (j = 0; j < DEMO_WIDGET_MAX_LAYER; j++) {
+	for (j = 0; k < dw->item_cnt; j++) {
 		for (i = 0; i < dw->item_cnt; i++) {
 			if (j == dw->item_map[i].layer) {
 				widget_paint(dw->item_map[i].w, x + dw->item_map[i].x, y + dw->item_map[i].y);
+				k++;
 			}
 		}
-	}	
+	}
 }
 
 void demo_widget_button_init(struct button *b, uint16_t id)
