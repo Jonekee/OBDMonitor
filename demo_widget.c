@@ -1,6 +1,7 @@
 #include <stdint.h>
-#include "widget.h"
 #include "button.h"
+
+#define DEMO_WIDGET_MAX_LAYER 5
 
 enum {
 	WIDGET_TYPE_BUTTON
@@ -27,9 +28,10 @@ struct demo_widget {
 	uint16_t item_cnt;
 };
 
-static struct button btns[BUTTON_ID_MAX];
 static void demo_widget_paint(struct widget *wid, uint16_t x, uint16_t y);
 static void demo_widget_button_init(struct button *b, uint16_t id);
+
+static struct button btns[BUTTON_ID_MAX];
 
 static struct widget_item widget_item_map[] = {
 	{3, 100, 200, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST1, (struct widget *)btns},
@@ -54,15 +56,34 @@ void demo_widget_init(struct demo_widget *w)
 
 void demo_widget_paint(struct widget *wid, uint16_t x, uint16_t y)
 {
-	
+	uint16_t i;
+	uint16_t j;
+	struct demo_widget *dw = (struct demo_widget *)wid;
+	for (j = 0; j < DEMO_WIDGET_MAX_LAYER; j++) {
+		for (i = 0; i < dw->item_cnt; i++) {
+			if (0 == dw->item_map[i].layer) {
+				widget_paint(dw->item_map[i].w, x + dw->item_map[i].x, y + dw->item_map[i].y);
+			}
+		}
+	}	
 }
 
 void demo_widget_button_init(struct button *b, uint16_t id)
 {
+	struct unicode text;
+	uint16_t w;
+	uint16_t h;
 	switch (id) {
 		case BUTTON_ID_TEST1:
+			w = 50;
+			h = 100;
 			break;
 		case BUTTON_ID_TEST2:
+			w = 100;
+			h = 50;
 			break;
+		default:
+			return;
 	}
+	button_init(b, 0, w, h, text);
 }
