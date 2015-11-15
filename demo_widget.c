@@ -34,8 +34,8 @@ static void demo_widget_button_init(struct button *b, uint16_t id);
 static struct button btns[BUTTON_ID_MAX];
 
 static struct widget_item widget_item_map[] = {
-	{3, 100, 200, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST1, (struct widget *)btns},
-	{2, 110, 210, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST2, (struct widget *)btns + 1}
+	{3, 100, 200, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST1, (struct widget *)&btns[0]},
+	{2, 110, 210, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST2, (struct widget *)&btns[1]}
 };
 
 static struct demo_widget widget_inst = {
@@ -61,7 +61,7 @@ void demo_widget_paint(struct widget *wid, uint16_t x, uint16_t y)
 	struct demo_widget *dw = (struct demo_widget *)wid;
 	for (j = 0; j < DEMO_WIDGET_MAX_LAYER; j++) {
 		for (i = 0; i < dw->item_cnt; i++) {
-			if (0 == dw->item_map[i].layer) {
+			if (j == dw->item_map[i].layer) {
 				widget_paint(dw->item_map[i].w, x + dw->item_map[i].x, y + dw->item_map[i].y);
 			}
 		}

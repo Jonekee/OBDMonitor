@@ -8,7 +8,7 @@ extern void button_init(struct button *b, uint8_t type, uint16_t w, uint16_t h, 
 	b->base.paint = button_paint;
 	b->type = type;
 	b->pressed = 0;
-	b->visible = 0;
+	b->visible = 1;
 	b->w = w;
 	b->h = h;
 	b->text = text;
