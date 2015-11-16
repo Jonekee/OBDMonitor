@@ -49,7 +49,9 @@ Stack_Size      EQU     0x00000400
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size
-__initial_sp	EQU		0x20000000 + Stack_Size
+__initial_sp
+
+__initial_spTop EQU    0x20000000 + Stack_Size  ; stack used for SystemInit & SystemInit_ExtMemCtl
 
 
 ; <h> Heap Configuration
@@ -73,7 +75,7 @@ __heap_limit
                 EXPORT  __Vectors_End
                 EXPORT  __Vectors_Size
 
-__Vectors       DCD     __initial_sp               ; Top of Stack
+__Vectors       DCD     __initial_spTop            ; Top of Stack
                 DCD     Reset_Handler              ; Reset Handler
                 DCD     NMI_Handler                ; NMI Handler
                 DCD     HardFault_Handler          ; Hard Fault Handler
@@ -189,6 +191,8 @@ Reset_Handler    PROC
 
                  LDR     R0, =SystemInit
                  BLX     R0
+				 LDR     R0, =__initial_spTop ; restore original stack pointer
+				 MSR     MSP, R0
                  LDR     R0, =__main
                  BX      R0
                  ENDP

@@ -9,7 +9,7 @@ struct rectangle {
 	uint16_t h;
 };
 
-static uint16_t fb[480*800];
+static uint16_t fb[480 * 800];
 static struct rectangle update_area;
 
 struct lcd_driver {

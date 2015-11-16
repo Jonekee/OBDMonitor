@@ -797,15 +797,12 @@ void SystemInit_ExtMemCtl(void)
 	FSMC_Bank1->BTCR[5]=0X00000000;
 	FSMC_Bank1E->BWTR[4]=0X00000000;
 	
-	FSMC_Bank1->BTCR[4]|=1<<12;//存储器写使能
-	FSMC_Bank1->BTCR[4]|=1<<4; //存储器数据宽度为16bit 	    
-	//操作BTR寄存器			（HCLK=168M, 1个HCLK=6ns			    
-	FSMC_Bank1->BTCR[5]|=8<<8; //数据保持时间（DATAST）为9个HCLK 6*9=54ns	 	 
-	FSMC_Bank1->BTCR[5]|=0<<4; //地址保持时间（ADDHLD）未用到	  	 
-	FSMC_Bank1->BTCR[5]|=0<<0; //地址建立时间（ADDSET）为0个HCLK 0ns	 	 
-	//闪存写时序寄存器  
-	FSMC_Bank1E->BWTR[4]=0x0FFFFFFF;//默认值
-	//使能BANK1区域3
+	FSMC_Bank1->BTCR[4]|=1<<12;
+	FSMC_Bank1->BTCR[4]|=1<<4;
+	FSMC_Bank1->BTCR[5]|=8<<8;
+	FSMC_Bank1->BTCR[5]|=0<<4;
+	FSMC_Bank1->BTCR[5]|=0<<0;
+	FSMC_Bank1E->BWTR[4]=0x0FFFFFFF;
 	FSMC_Bank1->BTCR[4]|=1<<0;
   //FSMC_Bank1->BTCR[2]  = 0x00001011;
   //FSMC_Bank1->BTCR[3]  = 0x00000201;
