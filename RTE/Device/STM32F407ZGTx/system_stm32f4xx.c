@@ -149,6 +149,8 @@ const uint8_t AHBPrescTable[16] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 
   * @{
   */
 
+static void SetSysClock(void);
+
 #if defined (DATA_IN_ExtSRAM) || defined (DATA_IN_ExtSDRAM)
   static void SystemInit_ExtMemCtl(void); 
 #endif /* DATA_IN_ExtSRAM || DATA_IN_ExtSDRAM */
@@ -192,6 +194,8 @@ void SystemInit(void)
 
   /* Disable all interrupts */
   RCC->CIR = 0x00000000;
+	
+	SetSysClock();
 
 #if defined (DATA_IN_ExtSRAM) || defined (DATA_IN_ExtSDRAM)
   SystemInit_ExtMemCtl(); 
@@ -203,6 +207,87 @@ void SystemInit(void)
 #else
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
 #endif
+}
+
+#define HSE_STARTUP_TIMEOUT    ((uint16_t)0x05000)   /*!< Time out for HSE start up */
+#define PLL_M      25
+/* USB OTG FS, SDIO and RNG Clock =  PLL_VCO / PLLQ */
+#define PLL_Q      7
+#define PLL_N      336
+/* SYSCLK = PLL_VCO / PLL_P */
+#define PLL_P      2
+
+static void SetSysClock(void)
+{
+/******************************************************************************/
+/*            PLL (clocked by HSE) used as System clock source                */
+/******************************************************************************/
+  __IO uint32_t StartUpCounter = 0, HSEStatus = 0;
+  
+  /* Enable HSE */
+  RCC->CR |= ((uint32_t)RCC_CR_HSEON);
+ 
+  /* Wait till HSE is ready and if Time out is reached exit */
+  do
+  {
+    HSEStatus = RCC->CR & RCC_CR_HSERDY;
+    StartUpCounter++;
+  } while((HSEStatus == 0) && (StartUpCounter != HSE_STARTUP_TIMEOUT));
+
+  if ((RCC->CR & RCC_CR_HSERDY) != RESET)
+  {
+    HSEStatus = (uint32_t)0x01;
+  }
+  else
+  {
+    HSEStatus = (uint32_t)0x00;
+  }
+
+  if (HSEStatus == (uint32_t)0x01)
+  {
+    /* Select regulator voltage output Scale 1 mode */
+    RCC->APB1ENR |= RCC_APB1ENR_PWREN;
+    PWR->CR |= PWR_CR_VOS;
+
+    /* HCLK = SYSCLK / 1*/
+    RCC->CFGR |= RCC_CFGR_HPRE_DIV1;
+
+    /* PCLK2 = HCLK / 2*/
+    RCC->CFGR |= RCC_CFGR_PPRE2_DIV2;
+    
+    /* PCLK1 = HCLK / 4*/
+    RCC->CFGR |= RCC_CFGR_PPRE1_DIV4;
+
+   
+    /* Configure the main PLL */
+    RCC->PLLCFGR = PLL_M | (PLL_N << 6) | (((PLL_P >> 1) -1) << 16) |
+                   (RCC_PLLCFGR_PLLSRC_HSE) | (PLL_Q << 24);
+
+    /* Enable the main PLL */
+    RCC->CR |= RCC_CR_PLLON;
+
+    /* Wait till the main PLL is ready */
+    while((RCC->CR & RCC_CR_PLLRDY) == 0)
+    {
+    }
+
+    /* Configure Flash prefetch, Instruction cache, Data cache and wait state */
+    FLASH->ACR = FLASH_ACR_PRFTEN | FLASH_ACR_ICEN |FLASH_ACR_DCEN |FLASH_ACR_LATENCY_5WS;
+
+    /* Select the main PLL as system clock source */
+    RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+    RCC->CFGR |= RCC_CFGR_SW_PLL;
+
+    /* Wait till the main PLL is used as system clock source */
+    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS ) != RCC_CFGR_SWS_PLL);
+    {
+    }
+  }
+  else
+  { /* If HSE fails to start-up, the application will have wrong clock
+         configuration. User can add here some code to deal with this error */
+  }
+
 }
 
 /**
@@ -708,9 +793,23 @@ void SystemInit_ExtMemCtl(void)
   /* Delay after an RCC peripheral clock enabling */
   tmp = READ_BIT(RCC->AHB3ENR, RCC_AHB3ENR_FSMCEN);
   /* Configure and enable Bank1_SRAM2 */
-  FSMC_Bank1->BTCR[2]  = 0x00001011;
-  FSMC_Bank1->BTCR[3]  = 0x00000201;
-  FSMC_Bank1E->BWTR[2] = 0x0FFFFFFF;
+	FSMC_Bank1->BTCR[4]=0X00000000;
+	FSMC_Bank1->BTCR[5]=0X00000000;
+	FSMC_Bank1E->BWTR[4]=0X00000000;
+	
+	FSMC_Bank1->BTCR[4]|=1<<12;//存储器写使能
+	FSMC_Bank1->BTCR[4]|=1<<4; //存储器数据宽度为16bit 	    
+	//操作BTR寄存器			（HCLK=168M, 1个HCLK=6ns			    
+	FSMC_Bank1->BTCR[5]|=8<<8; //数据保持时间（DATAST）为9个HCLK 6*9=54ns	 	 
+	FSMC_Bank1->BTCR[5]|=0<<4; //地址保持时间（ADDHLD）未用到	  	 
+	FSMC_Bank1->BTCR[5]|=0<<0; //地址建立时间（ADDSET）为0个HCLK 0ns	 	 
+	//闪存写时序寄存器  
+	FSMC_Bank1E->BWTR[4]=0x0FFFFFFF;//默认值
+	//使能BANK1区域3
+	FSMC_Bank1->BTCR[4]|=1<<0;
+  //FSMC_Bank1->BTCR[2]  = 0x00001011;
+  //FSMC_Bank1->BTCR[3]  = 0x00000201;
+  //FSMC_Bank1E->BWTR[2] = 0x0FFFFFFF;
 #endif /* STM32F405xx || STM32F415xx || STM32F407xx || STM32F417xx */
 
 #endif /* DATA_IN_ExtSRAM */
