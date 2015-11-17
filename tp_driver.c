@@ -21,5 +21,6 @@ void tp_driver_open(void)
 
 int tp_driver_read(struct pointer *p, int cnt)
 {
+	driver->opt->read(&(driver->dev), &(p->x), &(p->y));
 	return 0;
 }

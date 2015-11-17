@@ -14,6 +14,8 @@ extern void lcd_driver_hw_init(void);
 
 extern void lcd_driver_open(void);
 
+extern void lcd_driver_clear(void);
+
 extern void lcd_driver_rectangle(struct rectangle *rect, uint16_t l, uint16_t c);
 
 extern void lcd_driver_close(void);

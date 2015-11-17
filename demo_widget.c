@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "lcd_driver.h"
 #include "button.h"
 
 #define DEMO_WIDGET_MAX_LAYER 5
@@ -59,6 +60,7 @@ void demo_widget_paint(struct widget *wid, uint16_t x, uint16_t y)
 	uint16_t i;
 	uint16_t j;
 	struct demo_widget *dw = (struct demo_widget *)wid;
+	lcd_driver_clear();
 	for (j = 0; j < DEMO_WIDGET_MAX_LAYER; j++) {
 		for (i = 0; i < dw->item_cnt; i++) {
 			if (j == dw->item_map[i].layer) {

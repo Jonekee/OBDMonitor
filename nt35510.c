@@ -3,14 +3,14 @@
 #include <stm32f4xx.h>
 
 static void nt35510_open(struct lcd_device *dev);
+static void nt35510_clear(struct lcd_device *dev);
 static void nt35510_draw_rectangle(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t c);
-static void nt35510_draw_point(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t color);
 static void nt35510_close(struct lcd_device *dev);
 
 struct lcd_opt nt35510_opt = {
 	nt35510_open,
+	nt35510_clear,
 	nt35510_draw_rectangle,
-	nt35510_draw_point,
 	nt35510_close
 };
 
@@ -441,6 +441,12 @@ void nt35510_open(struct lcd_device *dev)
 		}
 	}
 	
+	GPIOB->ODR |= GPIO_ODR_ODR_15;
+}
+
+void nt35510_clear(struct lcd_device *dev)
+{
+	uint32_t i;
 	dev->dev->cmd_reg = 0x2A00;
 	dev->dev->dat_reg = 0;
 	dev->dev->cmd_reg = 0x2A00+1;
@@ -458,60 +464,40 @@ void nt35510_open(struct lcd_device *dev)
 	dev->dev->cmd_reg = 0x2B00+3;
 	dev->dev->dat_reg = (dev->height - 1) & 0XFF;
 	
-	GPIOB->ODR |= GPIO_ODR_ODR_15;
-	
 	dev->dev->cmd_reg = 0X2C00;
 	
-	for (i = 0; i <= dev->width * dev->height; i++) {
+	for (i = 0; i < dev->width * dev->height; i++) {
 		dev->dev->dat_reg = 0x0000;
 	}
 }
 
-void nt35510_draw_rectangle(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t c)
-{
-	uint16_t i;
-	uint16_t j;
-	dev->dev->cmd_reg = 0x2A00;
-	dev->dev->dat_reg = (x - 1) >> 8;
-	dev->dev->cmd_reg = 0x2A00+1;
-	dev->dev->dat_reg = (x - 1) & 0xFF;
-	dev->dev->cmd_reg = 0x2A00+2;
-	dev->dev->dat_reg = (x + w - 1) >> 8;
-	dev->dev->cmd_reg = 0x2A00+3;
-	dev->dev->dat_reg = (x + w - 1) & 0XFF;
-	dev->dev->cmd_reg = 0x2B00;
-	dev->dev->dat_reg = (y - 1) >> 8;
-	dev->dev->cmd_reg = 0x2B00+1;
-	dev->dev->dat_reg = (y - 1) & 0xFF;
-	dev->dev->cmd_reg = 0x2B00+2;
-	dev->dev->dat_reg = (y + h - 1) >> 8;
-	dev->dev->cmd_reg = 0x2B00+3;
-	dev->dev->dat_reg = (y + h - 1) & 0XFF;
-	
-	dev->dev->cmd_reg = 0X2C00;
-	
-	for (i = 0; i <= w; i++) {
-		for (j = 0; j <= h; j++) {
-			dev->dev->dat_reg = c;
-		}
-	}
-}
+void nt35510_draw_rectangle(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t c) 
+{ 
+ 	uint16_t i; 
+ 	dev->dev->cmd_reg = 0x2A00; 
+ 	dev->dev->dat_reg = x >> 8; 
+ 	dev->dev->cmd_reg = 0x2A00+1; 
+ 	dev->dev->dat_reg = x & 0xFF; 
+	dev->dev->cmd_reg = 0x2A00+2; 
+	dev->dev->dat_reg = (x + w) >> 8; 
+	dev->dev->cmd_reg = 0x2A00+3; 
+	dev->dev->dat_reg = (x + w) & 0XFF; 
+	dev->dev->cmd_reg = 0x2B00; 
+ 	dev->dev->dat_reg = y >> 8; 
+	dev->dev->cmd_reg = 0x2B00+1; 
+	dev->dev->dat_reg = y & 0xFF; 
+	dev->dev->cmd_reg = 0x2B00+2; 
+	dev->dev->dat_reg = (y + h) >> 8; 
+	dev->dev->cmd_reg = 0x2B00+3; 
+	dev->dev->dat_reg = (y + h) & 0XFF; 
+	 
+	dev->dev->cmd_reg = 0X2C00; 
+	 
+	for (i = 0; i <= (w + 1) * (h + 1); i++) { 
+		dev->dev->dat_reg = c; 
+	} 
+} 
 
-void nt35510_draw_point(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t color)
-{
-	dev->dev->cmd_reg = 0x2A00;
-	dev->dev->dat_reg = x >> 8;
-	dev->dev->cmd_reg = 0x2A01;
-	dev->dev->dat_reg = x & 0xFF;
-	
-	dev->dev->cmd_reg = 0x2B00;
-	dev->dev->dat_reg = y >> 8;
-	dev->dev->cmd_reg = 0x2B01;
-	dev->dev->dat_reg = y & 0xFF;
-	
-	dev->dev->cmd_reg = 0x2C00;
-	dev->dev->dat_reg = color;
-}
 
 void nt35510_close(struct lcd_device *dev)
 {
