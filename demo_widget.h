@@ -3,8 +3,8 @@
 
 #include "widget.h"
 
-extern struct demo_widget *demo_widget_ptr;
+struct window;
 
-extern void demo_widget_init(struct demo_widget *w);
+extern struct window *demo_widget_ptr;
 
 #endif

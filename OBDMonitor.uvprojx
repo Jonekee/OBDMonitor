@@ -461,6 +461,16 @@
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
             </File>
+            <File>
+              <FileName>mainloop.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\mainloop.c</FilePath>
+            </File>
+            <File>
+              <FileName>winmgmt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\winmgmt.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -488,6 +498,11 @@
               <FileName>demo_widget.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\demo_widget.c</FilePath>
+            </File>
+            <File>
+              <FileName>window.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\window.c</FilePath>
             </File>
           </Files>
         </Group>

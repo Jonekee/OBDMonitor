@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include "lcd_driver.h"
+#include "common.h"
+#include "window.h"
 #include "button.h"
 
 #define DEMO_WIDGET_MAX_LAYER 5
@@ -18,74 +20,75 @@ struct widget_item {
 	uint8_t layer;
 	uint16_t x;
 	uint16_t y;
+	uint16_t w;
+	uint16_t h;
 	uint8_t type;
 	uint8_t id;
-	struct widget *w;
+	struct widget *wid;
 };
 
-struct demo_widget {
-	struct widget wid;
+struct demo_window {
+	struct window w;
 	struct widget_item *item_map;
 	uint16_t item_cnt;
 };
 
-static void demo_widget_paint(struct widget *wid, uint16_t x, uint16_t y);
-static void demo_widget_button_init(struct button *b, uint16_t id);
+static void demo_window_init(struct window *w);
+
+static void demo_window_paint(struct window *wid);
+
+static int demo_window_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y);
 
 static struct button btns[BUTTON_ID_MAX];
 
 static struct widget_item widget_item_map[] = {
-	{3, 100, 200, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST1, (struct widget *)&btns[0]},
-	{2, 110, 210, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST2, (struct widget *)&btns[1]}
+	{3, 0, 0, 50, 100, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST1, (struct widget *)&btns[0]},
+	{2, 110, 210, 100, 50, WIDGET_TYPE_BUTTON, BUTTON_ID_TEST2, (struct widget *)&btns[1]}
 };
 
-static struct demo_widget widget_inst = {
-	{demo_widget_paint}, widget_item_map, 2
+static struct demo_window window_inst = {
+	{demo_window_init, demo_window_paint, demo_window_touch}, widget_item_map, 2
 };
 
-struct demo_widget *demo_widget_ptr = &widget_inst;
+struct window *demo_window_ptr = (struct window *)&window_inst;
 
-void demo_widget_init(struct demo_widget *w)
+void demo_window_init(struct window *w)
 {
 	uint16_t i;
-	for (i = 0; i < w->item_cnt; i++) {
-		if (WIDGET_TYPE_BUTTON == w->item_map[i].type) {
-			demo_widget_button_init((struct button *)(w->item_map[i].w), w->item_map[i].id);
+	struct demo_window *dw = (struct demo_window *)w;
+	for (i = 0; i < dw->item_cnt; i++) {
+		if (WIDGET_TYPE_BUTTON == dw->item_map[i].type) {
+			struct unicode text;
+			button_init((struct button *)(dw->item_map[i].wid), dw->item_map[i].id, dw->item_map[i].w, dw->item_map[i].h, text);
 		}
 	}
 }
 
-void demo_widget_paint(struct widget *wid, uint16_t x, uint16_t y)
+void demo_window_paint(struct window *wid)
 {
 	uint16_t i;
 	uint16_t j;
-	struct demo_widget *dw = (struct demo_widget *)wid;
+	struct demo_window *dw = (struct demo_window *)wid;
 	lcd_driver_clear();
 	for (j = 0; j < DEMO_WIDGET_MAX_LAYER; j++) {
 		for (i = 0; i < dw->item_cnt; i++) {
 			if (j == dw->item_map[i].layer) {
-				widget_paint(dw->item_map[i].w, x + dw->item_map[i].x, y + dw->item_map[i].y);
+				widget_paint(dw->item_map[i].wid, dw->item_map[i].x, dw->item_map[i].y);
 			}
 		}
-	}	
+	}
 }
 
-void demo_widget_button_init(struct button *b, uint16_t id)
+int demo_window_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y)
 {
-	struct unicode text;
-	uint16_t w;
-	uint16_t h;
-	switch (id) {
-		case BUTTON_ID_TEST1:
-			w = 50;
-			h = 100;
-			break;
-		case BUTTON_ID_TEST2:
-			w = 100;
-			h = 50;
-			break;
-		default:
-			return;
+	uint16_t i;
+	uint16_t ret = 0;
+	struct demo_window *dw = (struct demo_window *)w;
+	for (i = 0; i < dw->item_cnt; i++) {
+		if (((x > dw->item_map[i].x) && (x < (dw->item_map[i].x + dw->item_map[i].w))) &&
+			((y > dw->item_map[i].y) && (y < (dw->item_map[i].y + dw->item_map[i].h)))) {
+			ret += widget_touch(dw->item_map[i].wid, type);
+		}
 	}
-	button_init(b, 0, w, h, text);
+	return ret;
 }
