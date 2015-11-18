@@ -537,9 +537,9 @@ const uint16_t GT9147_TPX_TBL[5]={GT_TP1_REG,GT_TP2_REG,GT_TP3_REG,GT_TP4_REG,GT
 //mode:0,正常扫描.
 //返回值:当前触屏状态.
 //0,触屏无触摸;1,触屏有触摸
-uint8_t GT9147_Scan(uint8_t mode)
+uint8_t GT9147_Scan(struct tp_device *dev)
 {
-	uint8_t buf[4];
+	uint8_t buf[4], mode;
 	uint8_t i=0;
 	uint8_t res=0;
 	uint8_t temp;
@@ -569,7 +569,7 @@ uint8_t GT9147_Scan(uint8_t mode)
 					if(tp_dev.touchtype&0X01)//横屏
 					{
 						tp_dev.y[i]=((uint16_t)buf[1]<<8)+buf[0];
-						tp_dev.x[i]=800-(((uint16_t)buf[3]<<8)+buf[2]);
+						tp_dev.x[i]=dev->height-(((uint16_t)buf[3]<<8)+buf[2]);
 					}else
 					{
 						tp_dev.x[i]=((uint16_t)buf[1]<<8)+buf[0];
@@ -579,7 +579,7 @@ uint8_t GT9147_Scan(uint8_t mode)
 				}			
 			} 
 			res=1;
-			if(tp_dev.x[0]>480||tp_dev.y[0]>800)//非法数据(坐标超出了)
+			if(tp_dev.x[0]>dev->width||tp_dev.y[0]>dev->height)//非法数据(坐标超出了)
 			{ 
 				if((mode&0XF)>1)		//有其他点有数据,则复第二个触点的数据到第一个触点.
 				{
@@ -620,15 +620,15 @@ GT9147_Init();
 int gt9147_read(struct tp_device *dev, uint16_t *x, uint16_t *y)
 {
 	uint8_t t=0; 
-		GT9147_Scan(0);
+		GT9147_Scan(dev);
 		for(t=0;t<5;t++)
 		{
 			if((tp_dev.sta)&(1<<t))
 			{
-				if(tp_dev.x[t]<480&&tp_dev.y[t]<800)
+				if(tp_dev.x[t]<dev->width&&tp_dev.y[t]<dev->height)
 				{
 					
-					if(tp_dev.x[t]>(480-24)&&tp_dev.y[t]<20)
+					if(tp_dev.x[t]>(dev->width-24)&&tp_dev.y[t]<20)
 					{
 						*x = 0;
 						*y = 0;

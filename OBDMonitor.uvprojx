@@ -471,6 +471,11 @@
               <FileType>1</FileType>
               <FilePath>.\winmgmt.c</FilePath>
             </File>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\touch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -483,11 +488,6 @@
               <FileName>button.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\button.c</FilePath>
-            </File>
-            <File>
-              <FileName>common.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\common.c</FilePath>
             </File>
             <File>
               <FileName>widget.c</FileName>

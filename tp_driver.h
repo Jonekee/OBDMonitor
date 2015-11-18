@@ -3,10 +3,7 @@
 
 #include <stdint.h>
 
-struct pointer {
-	uint16_t x;
-	uint16_t y;
-};
+#include "common.h"
 
 extern void tp_driver_open(void);
 

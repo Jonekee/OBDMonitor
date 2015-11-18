@@ -10,12 +10,6 @@ enum {
 	WIDGET_TYPE_BUTTON
 };
 
-enum {
-	BUTTON_ID_TEST1,
-	BUTTON_ID_TEST2,
-	BUTTON_ID_MAX
-};
-
 struct widget_item {
 	uint8_t layer;
 	uint16_t x;
@@ -37,7 +31,7 @@ static void demo_window_init(struct window *w);
 
 static void demo_window_paint(struct window *wid);
 
-static int demo_window_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y);
+static struct window_ctrl demo_window_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y);
 
 static struct button btns[BUTTON_ID_MAX];
 
@@ -79,16 +73,34 @@ void demo_window_paint(struct window *wid)
 	}
 }
 
-int demo_window_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y)
+struct window_ctrl demo_window_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y)
 {
-	uint16_t i;
-	uint16_t ret = 0;
+	uint16_t i, j;
+	struct window_ctrl ctrl;
 	struct demo_window *dw = (struct demo_window *)w;
-	for (i = 0; i < dw->item_cnt; i++) {
-		if (((x > dw->item_map[i].x) && (x < (dw->item_map[i].x + dw->item_map[i].w))) &&
-			((y > dw->item_map[i].y) && (y < (dw->item_map[i].y + dw->item_map[i].h)))) {
-			ret += widget_touch(dw->item_map[i].wid, type);
+	ctrl.update = 0;
+	ctrl.winid = WINDOW_ID_MAX;
+	ctrl.widid = WIDGET_ID_MAX;
+	
+	for (j = DEMO_WIDGET_MAX_LAYER; j > 0; j--) {
+		for (i = 0; i < dw->item_cnt; i++) {
+			if ((j - 1) == dw->item_map[i].layer) {
+				if (((x > dw->item_map[i].x) && (x < (dw->item_map[i].x + dw->item_map[i].w))) &&
+					((y > dw->item_map[i].y) && (y < (dw->item_map[i].y + dw->item_map[i].h)))) {
+						ctrl.update = widget_touch(dw->item_map[i].wid, type);
+						ctrl.widid = dw->item_map[i].id;
+						switch (ctrl.widid) {
+							case BUTTON_ID_TEST1:
+								break;
+							case BUTTON_ID_TEST2:
+								break;
+							default:
+								break;
+						}
+						return ctrl;
+				}
+			}
 		}
 	}
-	return ret;
+	return ctrl;
 }
