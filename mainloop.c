@@ -6,7 +6,7 @@
 int mainloop(void)
 {
 	uint8_t c = 1;
-	winmgmt_init(WINDOW_ID_DEMO);
+	winmgmt_init(WINDOW_ID_TOPMENU);
 	if (c) {
 	while (1) {
 			struct pointer p;

@@ -4,16 +4,17 @@
 #include <stdint.h>
 
 enum {
-	WINDOW_ID_DEMO,
+	WINDOW_ID_TOPMENU,
 	WINDOW_ID_MAX
 };
 
-enum {
-	BUTTON_ID_TEST1 = 0,
-	BUTTON_ID_TEST2 = 1,
-	BUTTON_ID_MAX,
-	WIDGET_ID_MAX
-};
+#define BUTTON_ID_PATTERN 0
+#define BUTTON_ID_ITEM    1
+#define BUTTON_ID_SETTING 2
+#define BUTTON_ID_BACK_1  3
+#define BUTTON_ID_MAX     4
+
+#define WIDGET_ID_MAX 2
 
 struct window_ctrl {
 	int update;

@@ -7,11 +7,11 @@ enum touch_type touch_detect(struct pointer *pt)
 	struct pointer p;
 	p.x = p.y = 0;
 	tp_driver_read(&p, 1);
-	if (p.x && p.y) {
+	if (((0 == last_point.x) && (0 == last_point.y)) && (p.x && p.y)) {
 		last_point = p;
 		*pt = p;
 		return TOUCH_TYPE_PRESS;
-	} else if (last_point.x && last_point.y) {
+	} else if (((0 == p.x) && (0 == p.y)) && (last_point.x && last_point.y)) {
 		*pt = last_point;
 		last_point.x = last_point.y = 0;
 		return TOUCH_TYPE_RELEASE;
