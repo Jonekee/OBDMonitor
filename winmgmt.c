@@ -1,7 +1,9 @@
 #include <stdint.h>
 #include "winmgmt.h"
 #include "window.h"
+
 #include "topmenu.h"
+#include "setting.h"
 
 
 static struct window widget_map[WINDOW_ID_MAX];
@@ -13,7 +15,10 @@ void winmgmt_init(uint16_t id)
 	struct window_opt opts;
 	opts.init = topmenu_init;
 	opts.touch = topmenu_touch;
-	window_init(&widget_map[WINDOW_ID_TOPMENU], topmenu_item_map, 4, opts);
+	window_init(widget_map + WINDOW_ID_TOPMENU, topmenu_item_ptr, 4, opts);
+	opts.init = setting_init;
+	opts.touch = setting_touch;
+	window_init(widget_map + WINDOW_ID_SETTING, setting_item_ptr, 8, opts);
 	cur_widget = &widget_map[WINDOW_ID_TOPMENU];
 	window_paint(cur_widget);
 }

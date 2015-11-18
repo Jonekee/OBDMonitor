@@ -5,22 +5,26 @@
 #include "window.h"
 #include "button.h"
 
-static struct button btns[4];
+static struct button btns[8];
 
-extern void topmenu_init(struct window *w);
+extern void setting_init(struct window *w);
 
 extern struct window_ctrl topmenu_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y);
 
-static struct widget_item topmenu_item_map[] = {
-	{1, 15, 330, 140, 140, WIDGET_TYPE_BUTTON, BUTTON_ID_PATTERN, (struct widget *)&btns[0]},
-	{1, 170, 330, 140, 140, WIDGET_TYPE_BUTTON, BUTTON_ID_ITEM, (struct widget *)&btns[1]},
-	{1, 325, 330, 140, 140, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING, (struct widget *)&btns[2]},
-	{1, 15, 500, 60, 60, WIDGET_TYPE_BUTTON, BUTTON_ID_BACK_1, (struct widget *)&btns[3]}
+static struct widget_item setting_item_map[] = {
+	{1, 120, 10, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_1, (struct widget *)&btns[0]},
+	{1, 120, 60, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_2, (struct widget *)&btns[1]},
+	{1, 120, 110, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_3, (struct widget *)&btns[2]},
+	{1, 120, 160, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_4, (struct widget *)&btns[3]},
+	{1, 120, 210, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_5, (struct widget *)&btns[4]},
+	{1, 120, 260, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_6, (struct widget *)&btns[5]},
+	{1, 120, 310, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_7, (struct widget *)&btns[6]},
+	{1, 120, 360, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_8, (struct widget *)&btns[7]}
 };
 
-struct widget_item *topmenu_item_ptr = topmenu_item_map;
+struct widget_item *setting_item_ptr = setting_item_map;
 
-void topmenu_init(struct window *w)
+void setting_init(struct window *w)
 {
 	uint16_t i;
 	for (i = 0; i < w->item_cnt; i++) {
@@ -31,7 +35,7 @@ void topmenu_init(struct window *w)
 	}
 }
 
-struct window_ctrl topmenu_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y)
+struct window_ctrl setting_touch(struct window *w, enum touch_type type, uint16_t x, uint16_t y)
 {
 	uint16_t i, j;
 	struct window_ctrl ctrl;
@@ -39,8 +43,7 @@ struct window_ctrl topmenu_touch(struct window *w, enum touch_type type, uint16_
 	ctrl.winid = WINDOW_ID_MAX;
 	ctrl.widid = WIDGET_ID_MAX;
 	
-	
-	if (0 == ((struct button *)(w->item_map[BUTTON_ID_BACK_1].wid))->visible) {
+	if (0 == ((struct button *)(w->item_map[BUTTON_ID_SETTING_8].wid))->visible) {
 		if (TOUCH_TYPE_PRESS == type) {
 			for (i = 0; i < w->item_cnt; i++) {
 				button_set_visible((struct button *)(w->item_map[i].wid), 1);
@@ -57,22 +60,9 @@ struct window_ctrl topmenu_touch(struct window *w, enum touch_type type, uint16_
 						ctrl.update = widget_touch(w->item_map[i].wid, type);
 						ctrl.widid = w->item_map[i].id;
 						switch (ctrl.widid) {
-							case BUTTON_ID_PATTERN:
+							case BUTTON_ID_SETTING_8:
 							{
-							}
-								break;
-							case BUTTON_ID_ITEM:
-								break;
-							case BUTTON_ID_SETTING:
-								ctrl.winid = WINDOW_ID_SETTING;
-								break;
-							case BUTTON_ID_BACK_1:
-							{
-								for (i = 0; i < w->item_cnt; i++) {
-									button_set_visible((struct button *)(w->item_map[i].wid), 0);
-								}
-								ctrl.update = 1;
-								printf("back is pressed\n");
+								ctrl.winid = WINDOW_ID_TOPMENU;
 							}
 								break;
 							default:
@@ -86,6 +76,6 @@ struct window_ctrl topmenu_touch(struct window *w, enum touch_type type, uint16_
 			}
 		}
 	}
-	}
+}
 	return ctrl;
 }

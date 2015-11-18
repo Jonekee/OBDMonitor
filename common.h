@@ -5,6 +5,7 @@
 
 enum {
 	WINDOW_ID_TOPMENU,
+	WINDOW_ID_SETTING,
 	WINDOW_ID_MAX
 };
 
@@ -12,7 +13,15 @@ enum {
 #define BUTTON_ID_ITEM    1
 #define BUTTON_ID_SETTING 2
 #define BUTTON_ID_BACK_1  3
-#define BUTTON_ID_MAX     4
+#define BUTTON_ID_SETTING_1 4
+#define BUTTON_ID_SETTING_2 5
+#define BUTTON_ID_SETTING_3 6
+#define BUTTON_ID_SETTING_4 7
+#define BUTTON_ID_SETTING_5 8
+#define BUTTON_ID_SETTING_6 9
+#define BUTTON_ID_SETTING_7 10
+#define BUTTON_ID_SETTING_8 11
+#define BUTTON_ID_MAX     12
 
 #define WIDGET_ID_MAX 2
 

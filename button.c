@@ -33,11 +33,7 @@ void button_paint(struct widget *wid, uint16_t x, uint16_t y)
 			rect.y = y;
 			rect.w = btn->base.w;
 			rect.h = btn->base.h;
-		if (btn->pressed) {
-			lcd_driver_rectangle(&rect, 5, 0xF800);
-		} else {
 			lcd_driver_rectangle(&rect, 5, 0xFFFF);
-		}
 	}
 }
 
