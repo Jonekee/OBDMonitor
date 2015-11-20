@@ -21,13 +21,7 @@ struct widget_item {
 };
 
 struct window;
-typedef struct window_ctrl (*touch_cb)(struct window *w, enum touch_type type, uint16_t x, uint16_t y);
-
-
-struct window_opt {
-	void (*init)(struct window *w);
-	touch_cb touch;
-};
+typedef uint16_t (*touch_cb)(struct window *w, enum touch_type type, uint16_t widid);
 
 struct window {
 	struct widget_item *item_map;
@@ -35,7 +29,7 @@ struct window {
 	touch_cb touch;
 };
 
-extern void window_init(struct window *w, struct widget_item *item, uint16_t cnt, struct window_opt opts);
+extern void window_init(struct window *w, struct widget_item *item, uint16_t cnt, touch_cb touch);
 
 extern void window_paint(struct window *w);
 

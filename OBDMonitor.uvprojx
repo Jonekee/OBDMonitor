@@ -482,9 +482,19 @@
           <GroupName>APP</GroupName>
           <Files>
             <File>
+              <FileName>topmenu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\topmenu.c</FilePath>
+            </File>
+            <File>
               <FileName>appif.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\appif.c</FilePath>
+            </File>
+            <File>
+              <FileName>setting.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\setting.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -500,11 +510,6 @@
               <FileName>widget.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\widget.c</FilePath>
-            </File>
-            <File>
-              <FileName>demo_widget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\demo_widget.c</FilePath>
             </File>
             <File>
               <FileName>window.c</FileName>

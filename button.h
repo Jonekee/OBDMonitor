@@ -7,7 +7,6 @@
 struct button {
 	struct widget base;
 	uint8_t pressed;
-	uint8_t visible;
 	struct unicode text;
 };
 
