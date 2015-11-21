@@ -40,10 +40,5 @@ enum touch_type {
 	TOUCH_TYPE_NONE
 };
 
-struct unicode {
-	uint8_t *code;
-	uint8_t len;
-};
-
 #endif
 

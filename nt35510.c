@@ -5,12 +5,14 @@
 static void nt35510_open(struct lcd_device *dev);
 static void nt35510_clear(struct lcd_device *dev);
 static void nt35510_draw_rectangle(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t c);
+static void nt35510_draw_point(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t c);
 static void nt35510_close(struct lcd_device *dev);
 
 struct lcd_opt nt35510_opt = {
 	nt35510_open,
 	nt35510_clear,
 	nt35510_draw_rectangle,
+	nt35510_draw_point,
 	nt35510_close
 };
 
@@ -498,6 +500,19 @@ void nt35510_draw_rectangle(struct lcd_device *dev, uint16_t x, uint16_t y, uint
 	} 
 } 
 
+void nt35510_draw_point(struct lcd_device *dev, uint16_t x, uint16_t y, uint16_t c)
+{
+	dev->dev->cmd_reg = 0x2A00;
+ 	dev->dev->dat_reg = x >> 8;
+ 	dev->dev->cmd_reg = 0x2A00+1;
+ 	dev->dev->dat_reg = x & 0xFF;
+	dev->dev->cmd_reg = 0x2B00;
+ 	dev->dev->dat_reg = y >> 8;
+	dev->dev->cmd_reg = 0x2B00+1;
+	dev->dev->dat_reg = y & 0xFF;
+	dev->dev->cmd_reg = 0X2C00;
+	dev->dev->dat_reg = c;
+}
 
 void nt35510_close(struct lcd_device *dev)
 {

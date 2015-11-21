@@ -7,10 +7,9 @@
 struct button {
 	struct widget base;
 	uint8_t pressed;
-	struct unicode text;
 };
 
-extern void button_init(struct button *b, uint16_t id, uint16_t w, uint16_t h, struct unicode text);
+extern void button_init(struct button *b, uint16_t id, uint16_t w, uint16_t h);
 
 extern void button_set_visible(struct button *b, uint8_t v);
 

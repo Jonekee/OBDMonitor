@@ -18,6 +18,8 @@ extern void lcd_driver_clear(void);
 
 extern void lcd_driver_rectangle(struct rectangle *rect, uint16_t l, uint16_t c);
 
+extern void lcd_draw_point(uint16_t x, uint16_t y, uint16_t c);
+
 extern void lcd_driver_close(void);
 
 #endif

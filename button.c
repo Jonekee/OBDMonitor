@@ -1,16 +1,36 @@
 #include "button.h"
+#include "unitext.h"
 #include "lcd_driver.h"
+
+struct button_text {
+	uint16_t id;
+	wchar_t *text;
+};
+
+static struct button_text text_map[] = {
+	{BUTTON_ID_PATTERN,   L"PATTERN"},
+	{BUTTON_ID_ITEM,      L"ITEM"},
+	{BUTTON_ID_SETTING,   L"SETTING"},
+	{BUTTON_ID_BACK_1,    L"BACK"},
+	{BUTTON_ID_SETTING_1, L"SETTING_1"},
+	{BUTTON_ID_SETTING_2, L"SETTING_2"},
+	{BUTTON_ID_SETTING_3, L"SETTING_3"},
+	{BUTTON_ID_SETTING_4, L"SETTING_4"},
+	{BUTTON_ID_SETTING_5, L"SETTING_5"},
+	{BUTTON_ID_SETTING_6, L"SETTING_6"},
+	{BUTTON_ID_SETTING_7, L"SETTING_7"},
+	{BUTTON_ID_SETTING_8, L"SETTING_8"},
+};
 
 static void button_paint(struct widget *b, uint16_t x, uint16_t y);
 static int button_touch(struct widget *wid, enum touch_type type);
 
-extern void button_init(struct button *b, uint16_t id, uint16_t w, uint16_t h, struct unicode text)
+extern void button_init(struct button *b, uint16_t id, uint16_t w, uint16_t h)
 {
 	widget_init(&(b->base), id, w, h);
 	b->base.paint = button_paint;
 	b->base.touch = button_touch;
 	b->pressed = 0;
-	b->text = text;
 }
 
 void button_set_pressed(struct button *b, uint8_t p)
@@ -20,6 +40,7 @@ void button_set_pressed(struct button *b, uint8_t p)
 
 void button_paint(struct widget *wid, uint16_t x, uint16_t y)
 {
+	uint16_t i;
 	struct button *btn = (struct button *)wid;
 	struct rectangle rect;
 	rect.x = x;
@@ -27,6 +48,12 @@ void button_paint(struct widget *wid, uint16_t x, uint16_t y)
 	rect.w = btn->base.w;
 	rect.h = btn->base.h;
 	lcd_driver_rectangle(&rect, 5, 0xFFFF);
+	for (i = 0; i < WIDGET_ID_MAX; i++) {
+		if (text_map[i].id == wid->id) {
+			unitext_print(text_map[i].text, x + 5, y + 5);
+			return;
+		}
+	}
 }
 
 int button_touch(struct widget *wid, enum touch_type type)

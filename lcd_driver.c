@@ -32,10 +32,15 @@ void lcd_driver_clear(void)
 
 void lcd_driver_rectangle(struct rectangle *rect, uint16_t l, uint16_t c)
 {
-	driver->opt->draw_rectangle(&(driver->dev), rect->x, rect->y, rect->w, l, c); 
- 	driver->opt->draw_rectangle(&(driver->dev), rect->x, rect->y, l, rect->h, c); 
- 	driver->opt->draw_rectangle(&(driver->dev), rect->x + rect->w, rect->y, l, rect->h, c); 
- 	driver->opt->draw_rectangle(&(driver->dev), rect->x, rect->y + rect->h, rect->w + l, l, c); 
+	driver->opt->draw_rectangle(&(driver->dev), rect->x, rect->y, rect->w, l, c);
+ 	driver->opt->draw_rectangle(&(driver->dev), rect->x, rect->y, l, rect->h, c);
+ 	driver->opt->draw_rectangle(&(driver->dev), rect->x + rect->w, rect->y, l, rect->h, c);
+ 	driver->opt->draw_rectangle(&(driver->dev), rect->x, rect->y + rect->h, rect->w + l, l, c);
+}
+
+void lcd_draw_point(uint16_t x, uint16_t y, uint16_t c)
+{
+	driver->opt->draw_point(&(driver->dev), x, y, c);
 }
 
 void lcd_driver_close(void)

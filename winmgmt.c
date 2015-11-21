@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "winmgmt.h"
 #include "window.h"
+#include "unitext.h"
 
 extern void topmenu_init(struct window *w);
 extern void setting_init(struct window *w);
@@ -11,6 +12,7 @@ static struct window *cur_widget = 0;
 
 void winmgmt_init(uint16_t id)
 {
+	unitext_set_font(UNITEXT_LANG_EN, UNITEXT_FONT_NORMAL);
 	topmenu_init(&widget_map[WINDOW_ID_TOPMENU]);
 	setting_init(&widget_map[WINDOW_ID_SETTING]);
 	cur_widget = &widget_map[WINDOW_ID_TOPMENU];

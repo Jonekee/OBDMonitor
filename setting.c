@@ -26,8 +26,7 @@ void setting_init(struct window *w)
 	window_init(w, setting_item_map, 8, setting_touch);
 	for (i = 0; i < w->item_cnt; i++) {
 		if (WIDGET_TYPE_BUTTON == w->item_map[i].type) {
-			struct unicode text;
-			button_init((struct button *)(w->item_map[i].wid), w->item_map[i].id, w->item_map[i].w, w->item_map[i].h, text);
+			button_init((struct button *)(w->item_map[i].wid), w->item_map[i].id, w->item_map[i].w, w->item_map[i].h);
 		}
 	}
 }
