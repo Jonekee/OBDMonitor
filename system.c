@@ -1,5 +1,6 @@
 #include <stm32f4xx.h>
 
+#include "canbus_driver.h"
 #include "lcd_driver.h"
 #include "tp_driver.h"
 
@@ -155,6 +156,11 @@ void GPIO_AF_Set(GPIO_TypeDef* GPIOx,uint8_t BITx,uint8_t AFx)
 
 void system_hw_setup(void)
 {
+	RCC->AHB1ENR|=1<<0;  	//使能PORTA口时钟 
+	GPIO_Set(GPIOA,PIN11|PIN12,GPIO_MODE_AF,GPIO_OTYPE_PP,GPIO_SPEED_50M,GPIO_PUPD_PU);//PA11,PA12,复用功能,上拉输出
+ 	GPIO_AF_Set(GPIOA,11,9);//PA11,AF9
+	GPIO_AF_Set(GPIOA,12,9);//PA12,AF9 	   
+	
 	RCC->AHB1ENR|=0XF<<3;    	//使能PD,PE,PF,PG时钟  
 	RCC->AHB1ENR|=1<<1;     	//使能PB时钟  
 	RCC->AHB3ENR|=1<<0;     	//使能FSMC时钟  
@@ -219,6 +225,7 @@ void system_boot(void)
 	Stm32_Clock_Init(336,8,2,7);//设置时钟,168Mhz 
 	delay_init(168);
 	system_hw_setup();
+	canbus_driver_open();
 	lcd_driver_open();
 	tp_driver_open();
 }
