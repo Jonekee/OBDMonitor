@@ -42,7 +42,7 @@ void can_open(struct can_device *device)
 	CAN1->MCR|=0<<3;		//报文不锁定,新的覆盖旧的
 	CAN1->MCR|=0<<2;		//优先级由报文标识符决定
 	CAN1->BTR=0x00000000;	//清除原来的设置.
-	CAN1->BTR|=1<<30;	//模式设置 0,普通模式;1,回环模式;
+	CAN1->BTR|=0<<30;	//模式设置 0,普通模式;1,回环模式;
 	CAN1->BTR|=0<<24; 	//重新同步跳跃宽度(Tsjw)为tsjw+1个时间单位
 	CAN1->BTR|=5<<20; 	//Tbs2=tbs2+1个时间单位
 	CAN1->BTR|=6<<16;	//Tbs1=tbs1+1个时间单位

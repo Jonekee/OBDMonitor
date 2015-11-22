@@ -4,8 +4,10 @@
 #include "common.h"
 #include "window.h"
 #include "button.h"
+#include "text_view.h"
 
 static struct button btns[8];
+static struct text_view views;
 
 static uint16_t setting_touch(struct window *w, enum touch_type type, uint16_t widid);
 
@@ -17,7 +19,7 @@ static struct widget_item setting_item_map[] = {
 	{1, 120, 210, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_5, (struct widget *)&btns[4]},
 	{1, 120, 260, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_6, (struct widget *)&btns[5]},
 	{1, 120, 310, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_7, (struct widget *)&btns[6]},
-	{1, 120, 360, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_8, (struct widget *)&btns[7]}
+	{1, 120, 360, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_8, (struct widget *)&views}
 };
 
 void setting_init(struct window *w)
@@ -25,8 +27,19 @@ void setting_init(struct window *w)
 	uint16_t i;
 	window_init(w, setting_item_map, 8, setting_touch);
 	for (i = 0; i < w->item_cnt; i++) {
-		if (WIDGET_TYPE_BUTTON == w->item_map[i].type) {
-			button_init((struct button *)(w->item_map[i].wid), w->item_map[i].id, w->item_map[i].w, w->item_map[i].h);
+		switch (w->item_map[i].type) {
+			case WIDGET_TYPE_BUTTON:
+			{
+				button_init((struct button *)(w->item_map[i].wid), w->item_map[i].id, w->item_map[i].w, w->item_map[i].h);
+			}
+			break;
+			case WIDGET_TYPE_TEXT_VIEW:
+			{
+				text_view_init((struct text_view *)(w->item_map[i].wid), w->item_map[i].id, w->item_map[i].w, w->item_map[i].h);
+			}
+			break;
+			default:
+			break;
 		}
 	}
 }
@@ -34,9 +47,9 @@ void setting_init(struct window *w)
 uint16_t setting_touch(struct window *w, enum touch_type type, uint16_t widid)
 {
 	switch (widid) {
-		case BUTTON_ID_SETTING_8:
+		case TEXT_VIEW_ID_SETTING_8:
 				if (TOUCH_TYPE_PRESS == type) {
-					return WINDOW_ID_TOPMENU;
+					return WINDOW_ID_SETTING;
 				}
 			default:
 				break;

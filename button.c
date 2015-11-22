@@ -19,23 +19,17 @@ static struct button_text text_map[] = {
 	{BUTTON_ID_SETTING_5, L"SETTING_5"},
 	{BUTTON_ID_SETTING_6, L"SETTING_6"},
 	{BUTTON_ID_SETTING_7, L"SETTING_7"},
-	{BUTTON_ID_SETTING_8, L"SETTING_8"},
 };
 
 static void button_paint(struct widget *b, uint16_t x, uint16_t y);
 static int button_touch(struct widget *wid, enum touch_type type);
 
-extern void button_init(struct button *b, uint16_t id, uint16_t w, uint16_t h)
+void button_init(struct button *b, uint16_t id, uint16_t w, uint16_t h)
 {
 	widget_init(&(b->base), id, w, h);
 	b->base.paint = button_paint;
 	b->base.touch = button_touch;
 	b->pressed = 0;
-}
-
-void button_set_pressed(struct button *b, uint8_t p)
-{
-	b->pressed = p;
 }
 
 void button_paint(struct widget *wid, uint16_t x, uint16_t y)

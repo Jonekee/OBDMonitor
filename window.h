@@ -6,7 +6,8 @@
 #define DEMO_WIDGET_MAX_LAYER 5
 
 enum {
-	WIDGET_TYPE_BUTTON
+	WIDGET_TYPE_BUTTON,
+	WIDGET_TYPE_TEXT_VIEW
 };
 
 struct widget_item {
