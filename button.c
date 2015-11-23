@@ -45,17 +45,5 @@ void button_paint(struct widget *wid, uint16_t x, uint16_t y)
 
 int button_touch(struct widget *wid, enum touch_type type)
 {
-	struct button *btn = (struct button *)wid;
-	if (TOUCH_TYPE_PRESS == type) {
-		if (0 == btn->pressed) {
-			btn->pressed = 1;
-			return 1;
-		}
-	} else if (TOUCH_TYPE_RELEASE == type) {
-		if (1 == btn->pressed) {
-			btn->pressed = 0;
-			return 1;
-		}
-	}
 	return 0;
 }
