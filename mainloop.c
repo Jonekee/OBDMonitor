@@ -13,11 +13,12 @@ int mainloop(void)
 			enum touch_type type = touch_detect(&p);
 			if (TOUCH_TYPE_NONE != type) {
 				uint16_t widid;
-				if (winmgmt_touch(type, p.x, p.y, &widid)) {
-					winmgmt_paint();
-				}
+				uint8_t update = winmgmt_touch(type, p.x, p.y, &widid);
 				if (WIDGET_ID_MAX != widid) {
 					appif_touch_event(widid, type);
+				}
+				if (update) {
+					winmgmt_paint();
 				}
 				printf("pointer event (%d, %d)\n", p.x, p.y);
 			}

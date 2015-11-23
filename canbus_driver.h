@@ -29,8 +29,8 @@ struct can_frame {
 };
 
 extern void canbus_driver_open(void);
-extern int canbus_driver_read(struct can_frame *frame, uint8_t count);
-extern int canbus_driver_write(struct can_frame *frame, uint8_t count);
+extern void canbus_driver_read(struct can_frame *frame, uint8_t count);
+extern void canbus_driver_write(struct can_frame *frame, uint8_t count);
 extern void canbus_driver_close(void);
 
 #endif

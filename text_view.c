@@ -2,10 +2,6 @@
 #include "unitext.h"
 #include "lcd_driver.h"
 
-extern uint32_t rpm_value;
-extern uint32_t spd_value;
-extern uint32_t maf_value;
-
 static void text_view_paint(struct widget *b, uint16_t x, uint16_t y);
 static int text_view_touch(struct widget *wid, enum touch_type type);
 
@@ -24,6 +20,10 @@ static struct text_view_text text_view_text_map[] = {
 	{TEXT_VIEW_ID_SETTING_7,   L"TBD"},
 	{TEXT_VIEW_ID_SETTING_8,   L"BACK"},
 };
+
+extern uint32_t rpm_value;
+extern uint32_t spd_value;
+extern uint32_t maf_value;
 
 void text_view_init(struct text_view *t, uint16_t id, uint16_t w, uint16_t h)
 {
