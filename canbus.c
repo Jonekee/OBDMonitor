@@ -71,26 +71,29 @@ int can_read(struct can_device *device, struct can_frame *frame, uint8_t count)
 	if (count > cnt1 + cnt0) {
 		count = cnt1 + cnt0;
 	}
-	for (i = 0; i < cnt0; i++) {
-		frame[i].id.word = device->pcan->sFIFOMailBox[0].RIR;
-		frame[i].lts.word = device->pcan->sFIFOMailBox[0].RDTR;
-		for (j = 0; j < frame[i].lts.bits.dlc; j++) {
-			if (j < 4) {
-				frame[i].data[j] = device->pcan->sFIFOMailBox[0].RDLR >> ((j % 4) << 3);
-			} else {
-				frame[i].data[j] = device->pcan->sFIFOMailBox[0].RDHR >> ((j % 4) << 3);
+	for (i = 0; i < count; i++) {
+		if (i < cnt0) {
+			frame[i].id.word = device->pcan->sFIFOMailBox[0].RIR;
+			frame[i].lts.word = device->pcan->sFIFOMailBox[0].RDTR;
+			for (j = 0; j < frame[i].lts.bits.dlc; j++) {
+				if (j < 4) {
+					frame[i].data[j] = device->pcan->sFIFOMailBox[0].RDLR >> ((j % 4) << 3);
+				} else {
+					frame[i].data[j] = device->pcan->sFIFOMailBox[0].RDHR >> ((j % 4) << 3);
+				}
 			}
-		}
-	}
-	for (i = i - cnt0; i < cnt1; i++) {
-		frame[i].id.word = device->pcan->sFIFOMailBox[1].RIR;
-		frame[i].lts.word = device->pcan->sFIFOMailBox[1].RDTR;
-		for (j = 0; j < frame[i].lts.bits.dlc; j++) {
-			if (j < 4) {
-				frame[i].data[j] = device->pcan->sFIFOMailBox[1].RDLR >> ((j % 4) << 3);
-			} else {
-				frame[i].data[j] = device->pcan->sFIFOMailBox[1].RDHR >> ((j % 4) << 3);
+			device->pcan->RF0R |= 0x20;
+		} else {
+			frame[i].id.word = device->pcan->sFIFOMailBox[1].RIR;
+			frame[i].lts.word = device->pcan->sFIFOMailBox[1].RDTR;
+			for (j = 0; j < frame[i].lts.bits.dlc; j++) {
+				if (j < 4) {
+					frame[i].data[j] = device->pcan->sFIFOMailBox[1].RDLR >> ((j % 4) << 3);
+				} else {
+					frame[i].data[j] = device->pcan->sFIFOMailBox[1].RDHR >> ((j % 4) << 3);
+				}
 			}
+			device->pcan->RF1R |= 0x20;
 		}
 	}
 	return count;
