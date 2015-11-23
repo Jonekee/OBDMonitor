@@ -7,18 +7,11 @@ struct button_text {
 	wchar_t *text;
 };
 
-static struct button_text text_map[] = {
+static struct button_text button_text_map[] = {
 	{BUTTON_ID_PATTERN,   L"PATTERN"},
 	{BUTTON_ID_ITEM,      L"ITEM"},
 	{BUTTON_ID_SETTING,   L"SETTING"},
 	{BUTTON_ID_BACK_1,    L"BACK"},
-	{BUTTON_ID_SETTING_1, L"SETTING_1"},
-	{BUTTON_ID_SETTING_2, L"SETTING_2"},
-	{BUTTON_ID_SETTING_3, L"SETTING_3"},
-	{BUTTON_ID_SETTING_4, L"SETTING_4"},
-	{BUTTON_ID_SETTING_5, L"SETTING_5"},
-	{BUTTON_ID_SETTING_6, L"SETTING_6"},
-	{BUTTON_ID_SETTING_7, L"SETTING_7"},
 };
 
 static void button_paint(struct widget *b, uint16_t x, uint16_t y);
@@ -43,8 +36,8 @@ void button_paint(struct widget *wid, uint16_t x, uint16_t y)
 	rect.h = btn->base.h;
 	lcd_driver_rectangle(&rect, 5, 0xFFFF);
 	for (i = 0; i < WIDGET_ID_MAX; i++) {
-		if (text_map[i].id == wid->id) {
-			unitext_print(text_map[i].text, x + 5, y + 5);
+		if (button_text_map[i].id == wid->id) {
+			unitext_print(button_text_map[i].text, x + 5, y + 5);
 			return;
 		}
 	}

@@ -6,20 +6,19 @@
 #include "button.h"
 #include "text_view.h"
 
-static struct button btns[8];
-static struct text_view views;
+static struct text_view views[8];
 
 static uint16_t setting_touch(struct window *w, enum touch_type type, uint16_t widid);
 
 static struct widget_item setting_item_map[] = {
-	{1, 120, 10, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_1, (struct widget *)&btns[0]},
-	{1, 120, 60, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_2, (struct widget *)&btns[1]},
-	{1, 120, 110, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_3, (struct widget *)&btns[2]},
-	{1, 120, 160, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_4, (struct widget *)&btns[3]},
-	{1, 120, 210, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_5, (struct widget *)&btns[4]},
-	{1, 120, 260, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_6, (struct widget *)&btns[5]},
-	{1, 120, 310, 240, 40, WIDGET_TYPE_BUTTON, BUTTON_ID_SETTING_7, (struct widget *)&btns[6]},
-	{1, 120, 360, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_8, (struct widget *)&views}
+	{1, 120, 10, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_1, (struct widget *)&views[0]},
+	{1, 120, 60, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_2, (struct widget *)&views[1]},
+	{1, 120, 110, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_3, (struct widget *)&views[2]},
+	{1, 120, 160, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_4, (struct widget *)&views[3]},
+	{1, 120, 210, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_5, (struct widget *)&views[4]},
+	{1, 120, 260, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_6, (struct widget *)&views[5]},
+	{1, 120, 310, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_7, (struct widget *)&views[6]},
+	{1, 120, 360, 240, 40, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_SETTING_8, (struct widget *)&views[7]}
 };
 
 void setting_init(struct window *w)
@@ -49,7 +48,7 @@ uint16_t setting_touch(struct window *w, enum touch_type type, uint16_t widid)
 	switch (widid) {
 		case TEXT_VIEW_ID_SETTING_8:
 				if (TOUCH_TYPE_PRESS == type) {
-					return WINDOW_ID_SETTING;
+					return WINDOW_ID_TOPMENU;
 				}
 			default:
 				break;

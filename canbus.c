@@ -96,6 +96,12 @@ int can_read(struct can_device *device, struct can_frame *frame, uint8_t count)
 			device->pcan->RF1R |= 0x20;
 		}
 	}
+	if (cnt0) {
+		device->pcan->RF0R |= 0x20;
+	}
+	if (cnt1) {
+		device->pcan->RF1R |= 0x20;
+	}
 	return count;
 }
 

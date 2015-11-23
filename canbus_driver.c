@@ -21,6 +21,7 @@ int canbus_driver_read(struct can_frame *frame, uint8_t count)
 {
 	return driver->opt->read(&(driver->dev), frame, count);
 }
+
 int canbus_driver_write(struct can_frame *frame, uint8_t count)
 {
 	return driver->opt->write(&(driver->dev), frame, count);
