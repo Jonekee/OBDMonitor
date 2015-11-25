@@ -14,9 +14,7 @@ int mainloop(void)
 			if (TOUCH_TYPE_NONE != type) {
 				uint16_t widid;
 				uint8_t update = winmgmt_touch(type, p.x, p.y, &widid);
-				if (WIDGET_ID_MAX != widid) {
-					appif_touch_event(widid, type);
-				}
+				appif_touch_event(widid, type);
 				if (update) {
 					winmgmt_paint();
 				}

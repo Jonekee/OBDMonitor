@@ -8,7 +8,7 @@ struct canbus_driver {
 	struct canbus_opt *opt;
 };
 
-static struct canbus_driver can_dev = {{CAN1, 0}, &can_opt};
+static struct canbus_driver can_dev = {{CAN1}, &can_opt};
 
 static struct canbus_driver *driver = &can_dev;
 

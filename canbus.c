@@ -82,7 +82,7 @@ int can_read(struct can_device *device, struct can_frame *frame, uint8_t count)
 					frame[i].data[j] = device->pcan->sFIFOMailBox[0].RDHR >> ((j % 4) << 3);
 				}
 			}
-			device->pcan->RF0R |= 0x20;
+			device->pcan->RF0R |= CAN_RF0R_RFOM0;
 		} else {
 			frame[i].id.word = device->pcan->sFIFOMailBox[1].RIR;
 			frame[i].lts.word = device->pcan->sFIFOMailBox[1].RDTR;
@@ -93,7 +93,7 @@ int can_read(struct can_device *device, struct can_frame *frame, uint8_t count)
 					frame[i].data[j] = device->pcan->sFIFOMailBox[1].RDHR >> ((j % 4) << 3);
 				}
 			}
-			device->pcan->RF1R |= 0x20;
+			device->pcan->RF1R |= CAN_RF1R_RFOM1;
 		}
 	}
 	if (cnt0) {

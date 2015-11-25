@@ -2,16 +2,18 @@
 #include "unitext.h"
 #include "lcd_driver.h"
 
-struct button_text {
+struct btn_text_item {
 	uint16_t id;
 	wchar_t *text;
 };
 
-static struct button_text button_text_map[] = {
-	{BUTTON_ID_PATTERN,   L"PATTERN"},
-	{BUTTON_ID_ITEM,      L"ITEM"},
-	{BUTTON_ID_SETTING,   L"SETTING"},
-	{BUTTON_ID_BACK_1,    L"BACK"},
+static struct btn_text_item btn_text_map[] = {
+	{BUTTON_ID_PATTERN, L"PATTERN"},
+	{BUTTON_ID_ITEM, L"ITEM"},
+	{BUTTON_ID_SETTING, L"SETTING"},
+	{BUTTON_ID_RPM, L"RPM"},
+	{BUTTON_ID_SPD, L"SPD"},
+	{BUTTON_ID_MAF, L"MAF"},
 };
 
 static void button_paint(struct widget *b, uint16_t x, uint16_t y);
@@ -35,10 +37,10 @@ void button_paint(struct widget *wid, uint16_t x, uint16_t y)
 	rect.w = btn->base.w;
 	rect.h = btn->base.h;
 	lcd_driver_rectangle(&rect, 5, 0xFFFF);
-	for (i = 0; i < WIDGET_ID_MAX; i++) {
-		if (button_text_map[i].id == wid->id) {
-			unitext_print(button_text_map[i].text, x + 5, y + 5);
-			return;
+	for (i = 0; i < sizeof(btn_text_map) / sizeof(struct btn_text_item); i++) {
+		if (wid->id == btn_text_map[i].id) {
+			unitext_print(btn_text_map[i].text, x + 5, y + 5);
+			break;
 		}
 	}
 }

@@ -7,7 +7,6 @@
 
 struct can_device {
 	CAN_TypeDef *pcan;
-	GPIO_TypeDef *pio;
 };
 
 struct can_device;

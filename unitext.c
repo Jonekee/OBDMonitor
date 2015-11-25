@@ -213,6 +213,9 @@ uint8_t unitext_get_lang(void)
 
 void unitext_print(wchar_t *text, uint16_t x, uint16_t y)
 {
+	if (!text) {
+		return;
+	}
 	switch (gfont) {
 		case UNITEXT_FONT_NORMAL:
 			{

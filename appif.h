@@ -6,4 +6,6 @@
 
 extern void appif_touch_event(uint16_t widid, enum touch_type type);
 
+extern int appif_idle_task(void);
+
 #endif
