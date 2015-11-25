@@ -20,7 +20,7 @@ static uint16_t cur_text_view_id = WIDGET_ID_MAX;
 static uint16_t topmenu_touch(struct window *w, enum touch_type type, uint16_t widid);
 static void topmenu_set_position(struct window *w, uint16_t id, uint16_t x, uint16_t y);
 
-static struct widget_item topmenu_item_map[9] = {
+static struct widget_item topmenu_item_map[] = {
 	{1, 20, 20, 200, 60, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_1, (struct widget *)&views[0]},
 	{1, 260, 20, 200, 60, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_2, (struct widget *)&views[1]},
 	

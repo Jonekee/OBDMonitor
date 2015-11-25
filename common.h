@@ -16,7 +16,14 @@
 #define BUTTON_ID_RPM      6
 #define BUTTON_ID_SPD      7
 #define BUTTON_ID_MAF      8
-#define WIDGET_ID_MAX      9
+#define BUTTON_ID_LANG     9
+#define BUTTON_ID_VEHICLE  10
+#define BUTTON_ID_UNIT     11
+#define BUTTON_ID_PERCENT  12
+#define BUTTON_ID_DISPLAY  13
+#define BUTTON_ID_BUZZER   14
+#define BUTTON_ID_FONT     15
+#define WIDGET_ID_MAX      16
 
 struct window_ctrl {
 	int update;

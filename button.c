@@ -14,6 +14,13 @@ static struct btn_text_item btn_text_map[] = {
 	{BUTTON_ID_RPM, L"RPM"},
 	{BUTTON_ID_SPD, L"SPD"},
 	{BUTTON_ID_MAF, L"MAF"},
+	{BUTTON_ID_LANG, L"LANGUAGE"},
+  {BUTTON_ID_VEHICLE, L"VEHICLE"},
+	{BUTTON_ID_UNIT, L"UNIT"},
+  {BUTTON_ID_PERCENT, L"PERCENT"},
+  {BUTTON_ID_DISPLAY, L"DISPLAY"},
+  {BUTTON_ID_BUZZER, L"BUZZER"},
+  {BUTTON_ID_FONT, L"FONT"},
 };
 
 static void button_paint(struct widget *b, uint16_t x, uint16_t y);
