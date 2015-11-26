@@ -57,3 +57,19 @@ struct window_ctrl window_touch(struct window *w, enum touch_type type, uint16_t
 	}
 	return ctrl;
 }
+
+void window_set_position(struct window *w, uint16_t id, uint16_t x, uint16_t y)
+{
+	uint16_t i;
+	for (i = 0; i < w->item_cnt; i++) {
+		if (w->item_map[i].id == id) {
+			if (x) {
+				w->item_map[i].x = x;
+			}
+			if (y) {
+				w->item_map[i].y = y;
+			}
+			break;
+		}
+	}
+}

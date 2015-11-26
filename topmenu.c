@@ -18,7 +18,6 @@ static int status = 0;
 static uint16_t cur_text_view_id = WIDGET_ID_MAX;
 
 static uint16_t topmenu_touch(struct window *w, enum touch_type type, uint16_t widid);
-static void topmenu_set_position(struct window *w, uint16_t id, uint16_t x, uint16_t y);
 
 static struct widget_item topmenu_item_map[] = {
 	{1, 20, 20, 200, 60, WIDGET_TYPE_TEXT_VIEW, TEXT_VIEW_ID_1, (struct widget *)&views[0]},
@@ -138,9 +137,9 @@ uint16_t topmenu_touch(struct window *w, enum touch_type type, uint16_t widid)
 							case BUTTON_ID_MAF:
 							{
 								if (TEXT_VIEW_ID_1 == widid) {
-									topmenu_set_position(w, w->item_map[i].id, 20, w->item_map[i].y);
+									window_set_position(w, w->item_map[i].id, 20, w->item_map[i].y);
 								} else {
-									topmenu_set_position(w, w->item_map[i].id, 260, w->item_map[i].y);
+									window_set_position(w, w->item_map[i].id, 260, w->item_map[i].y);
 								}
 								cur_text_view_id = widid;
 								widget_set_visible(w->item_map[i].wid, 1);
@@ -198,20 +197,4 @@ uint16_t topmenu_touch(struct window *w, enum touch_type type, uint16_t widid)
 		}
 	}
 	return WINDOW_ID_MAX;
-}
-
-void topmenu_set_position(struct window *w, uint16_t id, uint16_t x, uint16_t y)
-{
-	uint16_t i;
-	for (i = 0; i < w->item_cnt; i++) {
-		if (w->item_map[i].id == id) {
-			if (x) {
-				w->item_map[i].x = x;
-			}
-			if (y) {
-				w->item_map[i].y = y;
-			}
-			break;
-		}
-	}
 }
